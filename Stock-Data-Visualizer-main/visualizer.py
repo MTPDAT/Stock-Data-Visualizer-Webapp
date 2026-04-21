@@ -163,6 +163,6 @@ def createGraph(StartTime, EndTime, DesiredGraph, Company, TimeSeries):
     plt.tight_layout()
     
     # Show the plot
-    plt.show()
+    #plt.show()
     
     return fig
