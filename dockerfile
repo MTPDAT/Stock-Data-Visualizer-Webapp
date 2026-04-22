@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first (for layer caching)
-RUN pip instal --upgrade pip
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -21,9 +20,10 @@ COPY stocks.csv .
 
 # Copy templates and static folders
 COPY templates/ templates/
+COPY static/ static/
 
 # Expose Flask port
-EXPOSE 5000
+EXPOSE 5005
 
 # Set environment variables
 ENV FLASK_APP=app.py
