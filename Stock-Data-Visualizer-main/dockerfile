@@ -19,7 +19,7 @@ COPY visualizer.py .
 COPY stocks.csv .
 
 
-COPY templates/base.html
+COPY templates/base.html templates/
 # Expose Flask port
 EXPOSE 5005
 
