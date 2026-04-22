@@ -113,7 +113,7 @@ def index():
             import traceback
             traceback.print_exc()
     
-    return render_template('test.html', 
+    return render_template('base.html', 
                          stocks=stocks,
                          time_series_names=time_series_names,
                          chart_image=chart_image,
