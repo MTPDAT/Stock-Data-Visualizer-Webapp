@@ -18,10 +18,8 @@ COPY api_handler.py .
 COPY visualizer.py .
 COPY stocks.csv .
 
-# Copy templates and static folders
-COPY templates/ templates/
-COPY static/ static/
 
+COPY templates/base.html
 # Expose Flask port
 EXPOSE 5005
 
