@@ -30,10 +30,9 @@
                 <div class="form-group">
                     <label for="time_series">Time Series Interval</label>
                     <select name="time_series" id="time_series" required>
-                        {% for key, name in time_series_options.items() %}
+                       {% for key, name in time_series_names.items() %}
                         <option value="{{ key }}" {% if request.form.get('time_series') == key %}selected{% endif %}>
-                            {{ name }}
-                        </option>
+                        {{ name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -104,15 +103,6 @@
             const form = document.getElementById('stockForm');
             const loadingDiv = document.getElementById('loading');
             
-            form.addEventListener('submit', function() {
-                loadingDiv.style.display = 'block';
-                setTimeout(() => {
-                    // If loading takes more than 30 seconds, hide it (in case of error)
-                    setTimeout(() => {
-                        loadingDiv.style.display = 'none';
-                    }, 30000);
-                }, 100);
-            });
         });
         
         // Validate dates
