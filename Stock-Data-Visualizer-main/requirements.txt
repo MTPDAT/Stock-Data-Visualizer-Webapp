@@ -1,4 +1,6 @@
+flask
 requests
+matplotlib
 pandas
-plotly
+numpy
 python-dotenv

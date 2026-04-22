@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  stock-visualizer:
+    build: .
+    ports:
+      - "5005:5000"
+    environment:
+      - MPLBACKEND=Agg
+      - SECRET_KEY=H0XQD306IFOZECWX
+      - ./stocks.csv:/app/stocks.csv
+    restart: unless-stopped
