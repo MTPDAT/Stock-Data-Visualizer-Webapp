@@ -3,9 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Stock Data Visualizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <h1>Stock Data Visualizer</h1>
+            <p>Visualize stock market trends with interactive charts</p>
+        </div>
+        
+        <div class="form-container">
+            <form method="POST" action="/" id="stockForm">
+                <div class="form-group">
+                    <label for="symbol">Stock Symbol</label>
+                    <select name="symbol" id="symbol" required>
+                        <option value="">Select a stock symbol...</option>
+                        {% for stock in stocks %}
+                        <option value="{{ stock.Symbol }}" {% if request.form.get('symbol') == stock.Symbol %}selected{% endif %}>
+                            {{ stock.Symbol }} - {{ stock.Name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="time_series">Time Series Interval</label>
+                    <select name="time_series" id="time_series" required>
+                       {% for key, name in time_series_names.items() %}
+                        <option value="{{ key }}" {% if request.form.get('time_series') == key %}selected{% endif %}>
+                        {{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Chart Type</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="chart_type" value="line" 
+                                   {% if request.form.get('chart_type') == 'line' or not request.form.get('chart_type') %}checked{% endif %}>
+                            Line Chart
+                        </label>
+                        <label>
+                            <input type="radio" name="chart_type" value="bar" 
+                                   {% if request.form.get('chart_type') == 'bar' %}checked{% endif %}>
+                            Bar Chart
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="start_date">Start Date</label>
+                        <input type="date" name="start_date" id="start_date" 
+                               value="{{ request.form.get('start_date', '2024-01-01') }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="end_date">End Date</label>
+                        <input type="date" name="end_date" id="end_date" 
+                               value="{{ request.form.get('end_date') }}" required>
+                    </div>
+                </div>
+                
+                <button type="submit">Generate Chart</button>
+            </form>
+            
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+                <p style="margin-top: 10px;">Fetching stock data and generating chart...</p>
+            </div>
+            
+            {% if error_message %}
+            <div class="error-message">
+                <strong>Error:</strong> {{ error_message }}
+            </div>
+            {% endif %}
+        </div>
+        
+        {% if chart_image %}
+        <div class="chart-container">
+            <h2>Stock Price Visualization</h2>
+            <img src="data:image/png;base64,{{ chart_image }}" alt="Stock Chart">
+        </div>
+        {% endif %}
+    </div>
     
+    <script>
+        // Set end date to today if not set
+        document.addEventListener('DOMContentLoaded', function() {
+            const endDateInput = document.getElementById('end_date');
+            if (!endDateInput.value) {
+                const today = new Date().toISOString().split('T')[0];
+                endDateInput.value = today;
+            }
+            
+            // Add loading animation on form submit
+            const form = document.getElementById('stockForm');
+            const loadingDiv = document.getElementById('loading');
+            
+        });
+        
+        // Validate dates
+        document.getElementById('stockForm').addEventListener('submit', function(e) {
+            const startDate = new Date(document.getElementById('start_date').value);
+            const endDate = new Date(document.getElementById('end_date').value);
+            
+            if (endDate < startDate) {
+                e.preventDefault();
+                alert('End date cannot be before start date!');
+                return false;
+            }
+        });
+    </script>
 </body>
 </html>
